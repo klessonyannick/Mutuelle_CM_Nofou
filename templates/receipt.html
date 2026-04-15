@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+.container {
+    max-width: 450px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    color: black;
+}
+
+/* TITRE */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* TEXTE */
+p {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+/* BUTTONS */
+.btn {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+}
+
+/* PDF */
+.pdf {
+    background: #00c853;
+}
+
+.pdf:hover {
+    background: #009624;
+}
+
+/* BACK */
+.back {
+    background: #555;
+}
+
+.back:hover {
+    background: #333;
+}
+
+.error {
+    text-align: center;
+    color: red;
+}
+
+</style>
+
+<div class="container">
+
+<h1>🧾 REÇU DE PAIEMENT</h1>
+
+{% if payment and member %}
+
+    <p><strong>Reçu N° :</strong> {{ payment.id }}</p>
+    <p><strong>Nom :</strong> {{ member.name }}</p>
+    <p><strong>Téléphone :</strong> {{ member.phone }}</p>
+    <p><strong>Montant :</strong> {{ payment.amount }} FCFA</p>
+    <p><strong>Date :</strong> {{ payment.date }}</p>
+
+    <!-- PDF (optionnel si route existe) -->
+    {% if payment.id %}
+    <a href="{{ url_for('receipt', payment_id=payment.id) }}" class="btn pdf">
+        📄 Télécharger PDF
+    </a>
+    {% endif %}
+
+    <!-- RETOUR -->
+    <a href="{{ url_for('dashboard') }}" class="btn back">
+        ⬅ Retour
+    </a>
+
+{% else %}
+    <p class="error">Membre ou paiement introuvable ❌</p>
+{% endif %}
+
+</div>
+
+{% endblock %}

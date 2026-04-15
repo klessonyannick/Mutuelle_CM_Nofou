@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* 🎯 CENTRAGE */
+.pay-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+/* 📦 CARD */
+.pay-card {
+    background: #111;
+    padding: 35px;
+    width: 350px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    text-align: center;
+    color: white;
+}
+
+/* 🪙 TITRE */
+.pay-card h2 {
+    margin-bottom: 15px;
+    color: #00c853;
+}
+
+/* 👤 MEMBRE */
+.member {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #ccc;
+}
+
+/* 🧾 INPUT */
+.pay-card input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: #1e1e1e;
+    color: white;
+    text-align: center;
+}
+
+/* 💰 BOUTON */
+.pay-card button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #00c853, #00e676);
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.pay-card button:hover {
+    transform: scale(1.05);
+}
+
+/* 🔙 RETOUR */
+.back {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #00e5ff;
+    color: #00e5ff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.back:hover {
+    background: #00e5ff;
+    color: #000;
+}
+
+/* 🔴 ERREUR */
+.error-msg {
+    color: #ff3b3b;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* 🟢 SUCCÈS */
+.success-msg {
+    color: #00ff88;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* ANIMATIONS */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+}
+
+</style>
+
+<div class="pay-container">
+
+    <div class="pay-card">
+
+        <h2>💰 Paiement</h2>
+
+        <div class="member">
+            👤 {{ member.name }}
+        </div>
+
+        <p>Solde actuel : {{ member.amount }} FCFA</p>
+
+        <form method="post">
+            <input 
+                type="number" 
+                name="amount" 
+                placeholder="Montant" 
+                min="1"
+                required
+            >
+            <button type="submit">Valider</button>
+        </form>
+
+        <!-- ERREUR -->
+        {% if error %}
+            <p class="error-msg">{{ error }}</p>
+        {% endif %}
+
+        <!-- SUCCÈS -->
+        {% if success %}
+            <p class="success-msg">{{ success }}</p>
+        {% endif %}
+
+        <a href="{{ url_for('dashboard') }}" class="back">⬅ Retour</a>
+
+    </div>
+
+</div>
+
+<!-- 🔄 REDIRECTION AUTO -->
+{% if success %}
+<script>
+setTimeout(() => {
+    window.location.href = "{{ url_for('dashboard') }}";
+}, 2000);
+</script>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* CONTAINER */
+.edit-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* CARD */
+.edit-card {
+    background: #111;
+    padding: 30px;
+    width: 350px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    text-align: center;
+    color: white;
+}
+
+/* TITRE */
+.edit-card h2 {
+    margin-bottom: 20px;
+    color: #00c853;
+}
+
+/* INPUT */
+.edit-card input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: none;
+    background: #1e1e1e;
+    color: white;
+    text-align: center;
+}
+
+/* BUTTON */
+.edit-card button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #00c853, #00e676);
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.edit-card button:hover {
+    transform: scale(1.05);
+}
+
+/* BACK */
+.back {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #00e5ff;
+    color: #00e5ff;
+    text-decoration: none;
+}
+
+.back:hover {
+    background: #00e5ff;
+    color: black;
+}
+
+</style>
+
+<div class="edit-container">
+
+    <div class="edit-card">
+
+        <h2>✏️ Modifier membre</h2>
+
+        <form method="post">
+
+            <input 
+                type="text" 
+                name="name" 
+                value="{{ member.name }}" 
+                placeholder="Nom"
+                required
+            >
+
+            <input 
+                type="text" 
+                name="phone" 
+                value="{{ member.phone }}" 
+                placeholder="Téléphone"
+                required
+            >
+
+            <input 
+                type="number" 
+                name="amount" 
+                value="{{ member.amount }}" 
+                placeholder="Montant"
+                min="0"
+                required
+            >
+
+            <button type="submit">Enregistrer</button>
+
+        </form>
+
+        <a href="{{ url_for('dashboard') }}" class="back">⬅ Retour</a>
+
+    </div>
+
+</div>
+
+{% endblock %}

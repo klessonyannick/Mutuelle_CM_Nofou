@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* CENTRAGE */
+.user-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* CARD */
+.user-card {
+    background: #111;
+    padding: 30px;
+    border-radius: 15px;
+    width: 350px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* INPUT GROUP */
+.input-group {
+    position: relative;
+    margin: 10px 0;
+}
+
+/* INPUT */
+.user-card input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #1e1e1e;
+    color: white;
+}
+
+/* PLACEHOLDER */
+.user-card input::placeholder {
+    color: #aaa;
+}
+
+/* EYE */
+.eye {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+}
+
+/* FORCE */
+.strength {
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.weak { color: red; }
+.medium { color: orange; }
+.strong { color: #00e676; }
+
+/* ERREUR BACKEND */
+.server-error {
+    color: #ff4d4d;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+/* ERREUR JS */
+.error {
+    color: red;
+    font-size: 12px;
+}
+
+/* BUTTON */
+.user-card button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #00e676;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.user-card button:hover {
+    transform: scale(1.05);
+}
+
+.user-card button:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+/* BACK */
+.back {
+    display: block;
+    margin-top: 15px;
+    color: #00e5ff;
+    text-decoration: none;
+}
+
+</style>
+
+<div class="user-container">
+
+<div class="user-card">
+
+<h2>👤 Créer utilisateur</h2>
+
+<!-- 🔴 ERREUR BACKEND -->
+{% if error %}
+<p class="server-error">{{ error }}</p>
+{% endif %}
+
+<form method="post">
+
+    <div class="input-group">
+        <input name="name" placeholder="Nom" required>
+    </div>
+
+    <div class="input-group">
+        <input name="phone" placeholder="Téléphone" required>
+    </div>
+
+    <div class="input-group">
+        <input name="username" placeholder="Nom utilisateur" required>
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="input-group">
+        <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+        <span class="eye" onclick="toggle('password')">👁</span>
+    </div>
+
+    <!-- CONFIRM -->
+    <div class="input-group">
+        <input type="password" id="confirm" name="confirm_password" placeholder="Confirmer mot de passe" required>
+        <span class="eye" onclick="toggle('confirm')">👁</span>
+    </div>
+
+    <div id="strength" class="strength"></div>
+    <div id="error" class="error"></div>
+
+    <button type="submit" id="btn" disabled>Créer</button>
+
+</form>
+
+<a href="{{ url_for('dashboard') }}" class="back">⬅ Retour</a>
+
+</div>
+
+</div>
+
+<script>
+
+// 👁 afficher mot de passe
+function toggle(id){
+    let input = document.getElementById(id);
+    if(input){
+        input.type = input.type === "password" ? "text" : "password";
+    }
+}
+
+// 🔐 sécurité
+let password = document.getElementById("password");
+let confirm = document.getElementById("confirm");
+let strength = document.getElementById("strength");
+let error = document.getElementById("error");
+let button = document.getElementById("btn");
+
+function checkPassword(){
+
+    if(!password || !confirm) return;
+
+    let val = password.value;
+    let conf = confirm.value;
+
+    // force
+    if(val.length < 4){
+        strength.innerHTML = "Faible ❌";
+        strength.className = "strength weak";
+        button.disabled = true;
+    }
+    else if(val.length < 8){
+        strength.innerHTML = "Moyen ⚠️";
+        strength.className = "strength medium";
+    }
+    else{
+        strength.innerHTML = "Fort 💪";
+        strength.className = "strength strong";
+    }
+
+    // confirmation
+    if(conf !== "" && val !== conf){
+        error.innerHTML = "Les mots de passe ne correspondent pas ❌";
+        button.disabled = true;
+    }
+    else{
+        error.innerHTML = "";
+
+        if(val.length >= 4){
+            button.disabled = false;
+        }
+    }
+}
+
+if(password && confirm){
+    password.addEventListener("input", checkPassword);
+    confirm.addEventListener("input", checkPassword);
+}
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* CONTAINER */
+.history-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+/* TITRE */
+.title {
+    text-align: center;
+    color: #00e676;
+    margin-bottom: 10px;
+}
+
+/* CARD TOTAL */
+.total-card {
+    background: #111;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(0,255,150,0.2);
+}
+
+.total-card p {
+    font-size: 28px;
+    color: #00e676;
+    font-weight: bold;
+}
+
+/* FILTRE */
+.filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #111;
+    color: white;
+}
+
+.filter button {
+    padding: 10px;
+    border-radius: 8px;
+    background: #00e676;
+    border: none;
+    cursor: pointer;
+}
+
+.filter button:hover {
+    background: #00c853;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    background: #111;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+th {
+    background: #00c853;
+    color: black;
+    padding: 12px;
+}
+
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #333;
+}
+
+tr:hover {
+    background: #1e1e1e;
+}
+
+/* BADGE */
+.amount {
+    background: #00e676;
+    color: black;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+/* BACK */
+.back {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    padding: 12px;
+    border: 1px solid #00e5ff;
+    border-radius: 10px;
+    color: #00e5ff;
+    text-decoration: none;
+}
+
+.back:hover {
+    background: #00e5ff;
+    color: black;
+}
+
+/* EMPTY */
+.empty {
+    text-align: center;
+    color: #aaa;
+    margin-top: 20px;
+}
+
+</style>
+
+<div class="history-container">
+
+    <h2 class="title">📜 Historique des paiements</h2>
+
+    <!-- TOTAL -->
+    <div class="total-card">
+        Total :
+        <p id="total">{{ payments | sum(attribute='amount') }} FCFA</p>
+    </div>
+
+    <!-- FILTRE -->
+    <div class="filter">
+        <input type="date" id="start">
+        <input type="date" id="end">
+        <button onclick="filterData()">Filtrer</button>
+    </div>
+
+    {% if payments %}
+    <table id="table">
+        <tr>
+            <th>Montant</th>
+            <th>Date</th>
+        </tr>
+
+        {% for p in payments %}
+        <tr data-date="{{ p.date }}" data-amount="{{ p.amount }}">
+            <td><span class="amount">{{ p.amount }} FCFA</span></td>
+            <td>{{ p.date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <p class="empty">Aucun paiement enregistré</p>
+    {% endif %}
+
+    <a href="{{ url_for('dashboard') }}" class="back">⬅ Retour</a>
+
+</div>
+
+<!-- FILTRE JS -->
+<script>
+function filterData(){
+    let start = document.getElementById("start").value;
+    let end = document.getElementById("end").value;
+
+    let rows = document.querySelectorAll("#table tr");
+    let total = 0;
+
+    rows.forEach((row, index) => {
+        if(index === 0) return;
+
+        let date = row.dataset.date;
+        let amount = parseFloat(row.dataset.amount);
+
+        if((!start || date >= start) && (!end || date <= end)){
+            row.style.display = "";
+            total += amount;
+        }else{
+            row.style.display = "none";
+        }
+    });
+
+    document.getElementById("total").innerText = total + " FCFA";
+}
+</script>
+
+{% endblock %}

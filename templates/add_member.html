@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* CENTRAGE */
+.add-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* CARD */
+.add-card {
+    background: #111;
+    padding: 30px;
+    width: 350px;
+    border-radius: 15px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* TITRE */
+.add-card h2 {
+    margin-bottom: 20px;
+    color: #00e676;
+}
+
+/* INPUT */
+.add-card input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: none;
+    background: #1e1e1e;
+    color: white;
+}
+
+/* PLACEHOLDER */
+.add-card input::placeholder {
+    color: #aaa;
+}
+
+/* BUTTON */
+.add-card button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(90deg, #00c853, #00e676);
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-card button:hover {
+    transform: scale(1.05);
+}
+
+/* BACK */
+.back {
+    display: block;
+    margin-top: 15px;
+    color: #00e5ff;
+    text-decoration: none;
+}
+
+.back:hover {
+    text-decoration: underline;
+}
+
+</style>
+
+<div class="add-container">
+
+    <div class="add-card">
+
+        <h2>➕ Ajouter un membre</h2>
+
+        <form method="post" action="{{ url_for('add') }}">
+
+            <input 
+                type="text" 
+                name="name" 
+                placeholder="Nom"
+                required
+            >
+
+            <input 
+                type="text" 
+                name="phone" 
+                placeholder="Téléphone"
+                required
+            >
+
+            <button type="submit">Ajouter</button>
+
+        </form>
+
+        <a href="{{ url_for('dashboard') }}" class="back">⬅ Retour</a>
+
+    </div>
+
+</div>
+
+{% endblock %}
